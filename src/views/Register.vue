@@ -55,37 +55,39 @@
                 v-model="data.email"
                 required
               >
+              <small class="text-red-800" v-if="errors.email">{{ errors.email[0] }}</small>
             </div>
           </div>
           <div class="md:flex md:items-center mb-6">
             <div class="md:w-1/3">
               <label
                 class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-                for="inline-username"
+                for=""
               >Password</label>
             </div>
             <div class="md:w-2/3">
               <input
                 class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                id="inline-username"
+                id=""
                 type="password"
                 placeholder="******************"
                 required
                 v-model="data.password"
               >
+              <small class="text-red-800" v-if="errors.password">{{ errors.password[0] }}</small>
             </div>
           </div>
           <div class="md:flex md:items-center mb-6">
             <div class="md:w-1/3">
               <label
                 class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-                for="inline-username"
+                for=""
               >Confirm Password</label>
             </div>
             <div class="md:w-2/3">
               <input
                 class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                id="inline-username"
+                id=""
                 type="password"
                 placeholder="******************"
                 required
@@ -125,7 +127,8 @@ export default {
       data: {},
       loading: false,
       error: false,
-      error_msg: ""
+      error_msg: "",
+      errors: {}
     };
   },
   components: {
@@ -159,23 +162,18 @@ export default {
 
       axios
         .post("http://134.209.24.105/api/register", this.data)
-        .then(function(response) {
-          self.loading = false;
-          if (response.status == "200" || response.status == "201") {
-            console.log(response.data);
-            localStorage.setItem("9S-User", response.data.user);
-            localStorage.setItem("9S-token", response.data.token);
-            self.$router.push("/");
-          } else {
-            self.error = true;
-            self.error_msg = "An error occured";
-            // Dsiplay
-            console.log(response);
-          }
+        .then((response) => {
+          this.loading = false;
+          // we may not need to do this if check if it gets here its successful
+          localStorage.setItem("9S-User", response.data.user);
+          localStorage.setItem("9S-token", response.data.token);
+          this.$router.replace("/");
         })
-        .catch(function(error) {
+        .catch((error) => {
           self.loading = false;
-          console.log(error);
+          this.errors = error.response.data.errors
+          console.log(this.errors);
+          // console.log(error.response.data);
         });
     }
   }
