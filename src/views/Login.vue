@@ -14,7 +14,7 @@
       <div class="block">
         <form class="w-full">
           <div class="uppercase text-3xl items-center">
-            <router-link class="hover:underline" to="/">
+            <router-link class="cursor-pointer no-underline" to="/">
               <span class="font-thin tracking-tighter">9JA</span>
               <span class="font-black tracking-tighter">STREAM</span>
             </router-link>
@@ -143,7 +143,7 @@ export default {
         .then(function(response) {
           self.loading = false;
           if (response.status == "200" || response.status == "201") {
-            console.log(response.data.token);
+            // console.log(response.data.token);
             localStorage.setItem("9S-token", response.data.token);
             self.getRole(response.data.token);
           } else {
